@@ -20,7 +20,7 @@ export default function AccountLine({ account }: AccountLineProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(copyText);
-      notify('계좌번호가 복사되었습니다');
+      notify('복사 완료');
     } catch {
       try {
         const textarea = document.createElement('textarea');
@@ -29,7 +29,7 @@ export default function AccountLine({ account }: AccountLineProps) {
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        notify('계좌번호가 복사되었습니다');
+        notify('복사 완료');
       } catch {
         notify('복사에 실패했습니다');
       }
