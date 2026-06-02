@@ -30,6 +30,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prepare wedding data
+        env:
+          WEDDING_JSON: ${{ secrets.WEDDING_JSON }}
+        run: |
+          if [ -n "$WEDDING_JSON" ]; then
+            echo "$WEDDING_JSON" > public/wedding.json
+          else
+            echo "::warning::WEDDING_JSON secret is not set. Deploying with wedding.example.json"
+            cp public/wedding.example.json public/wedding.json
+          fi
+
       - name: Build
         run: npm run build
 

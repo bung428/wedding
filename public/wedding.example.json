@@ -1,0 +1,37 @@
+{
+  "groomName": "신랑",
+  "brideName": "신부",
+  "groomParents": { "father": "신랑 아버지", "mother": "신랑 어머니" },
+  "brideParents": { "father": "신부 아버지", "mother": "신부 어머니" },
+  "wedding": {
+    "date": "2026-08-30T15:00:00",
+    "month": 8,
+    "day": 30,
+    "weekday": "일요일",
+    "period": "오후",
+    "hour": 15,
+    "minute": 0,
+    "venue": "예식장 이름",
+    "address": "서울시 예시 주소"
+  },
+  "invitation_message": {
+    "line1": "초대 메시지 첫 줄",
+    "line2": "초대 메시지 둘째 줄",
+    "line3": "초대 메시지 셋째 줄",
+    "line4": "초대 메시지 넷째 줄"
+  },
+  "accounts": {
+    "groom": [
+      { "title": "신랑", "bank": "은행명", "account": "000-000-000000", "owner": "예금주" }
+    ],
+    "bride": [
+      { "title": "신부", "bank": "은행명", "account": "000-000-000000", "owner": "예금주" }
+    ]
+  },
+  "transportation": {
+    "subway": ["지하철 안내"],
+    "bus": ["버스 안내"],
+    "shuttleBus": ["셔틀버스 안내"],
+    "parking": ["주차 안내"]
+  }
+}

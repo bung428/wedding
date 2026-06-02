@@ -3,69 +3,8 @@
 import { useState, useEffect } from 'react';
 import ImageGallery from './components/ImageGallery';
 import ScrollReveal from './components/ScrollReveal';
-
-// 환경변수에서 웨딩 정보 파싱
-const weddingInfoString = import.meta.env.VITE_WEDDING_INFO;
-interface WeddingInfo {
-  groomName: string;
-  brideName: string;
-  groomParents: { father: string; mother: string };
-  brideParents: { father: string; mother: string };
-  wedding: {
-    date: string;
-    month: number;
-    day: number;
-    weekday: string;
-    period: string;
-    hour: number;
-    minute: number;
-    venue: string;
-    address: string;
-  };
-  invitation_message: {
-    line1: string;
-    line2: string;
-    line3: string;
-    line4: string;
-  };
-  accounts: {
-    groom: Array<{ title: string; bank: string; account: string; owner: string }>;
-    bride: Array<{ title: string; bank: string; account: string; owner: string }>;
-  };
-  transportation: {
-    subway: string[];
-    bus: string[];
-    shuttleBus: string[];
-    parking: string[];
-  };
-}
-
-let WEDDING_INFO: WeddingInfo;
-try {
-  WEDDING_INFO = JSON.parse(weddingInfoString);
-} catch (e) {
-  console.error('Failed to parse VITE_WEDDING_INFO:', e);
-  WEDDING_INFO = {
-    groomName: '신랑',
-    brideName: '신부',
-    groomParents: { father: '신랑 아버지', mother: '신랑 어머니' },
-    brideParents: { father: '신부 아버지', mother: '신부 어머니' },
-    wedding: {
-      date: '2026-05-30T13:30:00',
-      month: 5,
-      day: 30,
-      weekday: '토요일',
-      period: '오후',
-      hour: 13,
-      minute: 30,
-      venue: '예식장',
-      address: '주소',
-    },
-    invitation_message: { line1: '', line2: '', line3: '', line4: '' },
-    accounts: { groom: [], bride: [] },
-    transportation: { subway: [], bus: [], shuttleBus: [], parking: [] },
-  };
-}
+import { useWeddingInfo } from './hooks/useWeddingInfo';
+import { openKakaoMap, openNaverMap, openTmap } from './utils/mapLinks';
 
 // 이미지 import
 import blackCouple1 from '../assets/images/black_couple_1.jpg';
@@ -116,10 +55,10 @@ const WEDDING_IMAGES = [
 
 const MAIN_IMAGE = WEDDING_IMAGES[0];
 
-const WEDDING_DATE = new Date(WEDDING_INFO.wedding.date);
-
+const WEEKDAYS = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
 export default function App() {
+  const { weddingInfo, isLoading } = useWeddingInfo();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -127,10 +66,14 @@ export default function App() {
     seconds: 0,
   });
 
+  const weddingDate = weddingInfo ? new Date(weddingInfo.wedding.date) : null;
+
   useEffect(() => {
+    if (!weddingDate) return;
+
     const calculateTimeLeft = () => {
-      const difference = WEDDING_DATE.getTime() - new Date().getTime();
-      
+      const difference = weddingDate.getTime() - Date.now();
+
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -145,7 +88,7 @@ export default function App() {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [weddingDate]);
 
   // 배경색 설정
   useEffect(() => {
@@ -158,16 +101,19 @@ export default function App() {
     };
   }, []);
 
-  const WEEKDAYS = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-  const weddingMonth = WEDDING_INFO.wedding.month;
-  const weddingDay = WEDDING_INFO.wedding.day;
-  const weddingWeekday = WEEKDAYS[WEDDING_DATE.getDay()];
-  const weddingHour = WEDDING_DATE.getHours();
-  const weddingMinute = WEDDING_DATE.getMinutes();
+  if (isLoading || !weddingInfo || !weddingDate) {
+    return <div className="min-h-screen bg-white" />;
+  }
+
+  const weddingMonth = weddingInfo.wedding.month;
+  const weddingDay = weddingInfo.wedding.day;
+  const weddingWeekday = WEEKDAYS[weddingDate.getDay()];
+  const weddingHour = weddingDate.getHours();
+  const weddingMinute = weddingDate.getMinutes();
   const weddingPeriod = weddingHour >= 12 ? '오후' : '오전';
   const weddingDisplayHour = weddingHour % 12 || 12;
   const weddingMinuteText = weddingMinute > 0 ? `${weddingMinute}분` : '';
-  const weddingDateText = `${WEDDING_DATE.getFullYear()}년 ${weddingMonth}월 ${weddingDay}일 ${weddingWeekday} ${weddingPeriod} ${weddingDisplayHour}시 ${weddingMinuteText}`;
+  const weddingDateText = `${weddingDate.getFullYear()}년 ${weddingMonth}월 ${weddingDay}일 ${weddingWeekday} ${weddingPeriod} ${weddingDisplayHour}시 ${weddingMinuteText}`;
   const weddingShortDateText = `${weddingMonth}.${weddingDay}`;
   const weddingTimeText = `${weddingWeekday} ${weddingPeriod} ${weddingDisplayHour}시 ${weddingMinuteText}`;
 
@@ -197,23 +143,23 @@ export default function App() {
           <ScrollReveal direction="fade" delay={0.2}>
             <div className="mb-8">
               <div className="text-5xl sm:text-6xl font-serif text-stone-700 mb-6">
-                {String(WEDDING_INFO.wedding.month).padStart(2, '0')}<span className="text-3xl mx-2">/</span>{String(WEDDING_INFO.wedding.day).padStart(2, '0')}
+                {String(weddingInfo.wedding.month).padStart(2, '0')}<span className="text-3xl mx-2">/</span>{String(weddingInfo.wedding.day).padStart(2, '0')}
               </div>
             </div>
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.4}>
             <div className="space-y-4">
-              <p className="text-sm sm:text-base text-stone-500 tracking-widest">{WEDDING_INFO.groomName}</p>
+              <p className="text-sm sm:text-base text-stone-500 tracking-widest">{weddingInfo.groomName}</p>
               <div className="w-12 h-px bg-stone-300 mx-auto" />
-              <p className="text-sm sm:text-base text-stone-500 tracking-widest">{WEDDING_INFO.brideName}</p>
+              <p className="text-sm sm:text-base text-stone-500 tracking-widest">{weddingInfo.brideName}</p>
             </div>
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.6}>
             <div className="mt-8 text-stone-600 text-xs sm:text-sm">
               <p>{weddingDateText}</p>
-              <p className="mt-1">{WEDDING_INFO.wedding.venue}</p>
+              <p className="mt-1">{weddingInfo.wedding.venue}</p>
             </div>
           </ScrollReveal>
         </div>
@@ -228,15 +174,15 @@ export default function App() {
             <h2 className="text-2xl sm:text-3xl font-serif text-stone-700 mb-8">초대합니다</h2>
             
             <div className="space-y-4 text-stone-600 leading-relaxed text-sm sm:text-base">
-              <p>{WEDDING_INFO.invitation_message.line1}</p>
-              <p>{WEDDING_INFO.invitation_message.line2}</p>
-              <p>{WEDDING_INFO.invitation_message.line3}</p>
-              <p className="text-rose-500">{WEDDING_INFO.invitation_message.line4}</p>
+              <p>{weddingInfo.invitation_message.line1}</p>
+              <p>{weddingInfo.invitation_message.line2}</p>
+              <p>{weddingInfo.invitation_message.line3}</p>
+              <p className="text-rose-500">{weddingInfo.invitation_message.line4}</p>
             </div>
 
             <div className="mt-12 space-y-3 text-sm text-stone-600">
-              <p>{WEDDING_INFO.groomParents.father} · {WEDDING_INFO.groomParents.mother} 의 아들 <span className="font-semibold">{WEDDING_INFO.groomName}</span></p>
-              <p>{WEDDING_INFO.brideParents.father} · {WEDDING_INFO.brideParents.mother} 의 딸 <span className="font-semibold">{WEDDING_INFO.brideName}</span></p>
+              <p>{weddingInfo.groomParents.father} · {weddingInfo.groomParents.mother} 의 아들 <span className="font-semibold">{weddingInfo.groomName}</span></p>
+              <p>{weddingInfo.brideParents.father} · {weddingInfo.brideParents.mother} 의 딸 <span className="font-semibold">{weddingInfo.brideName}</span></p>
             </div>
           </section>
         </ScrollReveal>
@@ -279,7 +225,7 @@ export default function App() {
             </div>
 
             <p className="text-center text-sm text-stone-500">
-              {WEDDING_INFO.groomName} ❤️ {WEDDING_INFO.brideName}의 결혼식이 <span className="text-rose-500 font-semibold">{timeLeft.days}일</span> 남았습니다.
+              {weddingInfo.groomName} ❤️ {weddingInfo.brideName}의 결혼식이 <span className="text-rose-500 font-semibold">{timeLeft.days}일</span> 남았습니다.
             </p>
           </section>
         </ScrollReveal>
@@ -304,8 +250,8 @@ export default function App() {
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
-              <h3 className="text-lg font-semibold text-stone-700 mb-2">{WEDDING_INFO.wedding.venue}</h3>
-              <p className="text-sm text-stone-500 mb-4">{WEDDING_INFO.wedding.address}</p>
+              <h3 className="text-lg font-semibold text-stone-700 mb-2">{weddingInfo.wedding.venue}</h3>
+              <p className="text-sm text-stone-500 mb-4">{weddingInfo.wedding.address}</p>
 
               {/* 지도 - 웨딩 장소 이미지 */}
               <div className="w-full h-48 rounded-xl mb-4 overflow-hidden bg-stone-100">
@@ -318,19 +264,22 @@ export default function App() {
 
               <div className="flex gap-2">
                 <button
-                  onClick={() => window.open(`https://map.naver.com/index.nhn?query=${encodeURIComponent(WEDDING_INFO.wedding.venue)}`, '_blank')}
+                  type="button"
+                  onClick={() => openNaverMap(weddingInfo.wedding.venue)}
                   className="flex-1 py-2 border border-stone-300 rounded-lg text-xs text-stone-600 hover:bg-stone-50 transition"
                 >
                   🗺️ 네이버 지도
                 </button>
                 <button
-                  onClick={() => window.open(`https://map.kakao.com/?q=${encodeURIComponent(WEDDING_INFO.wedding.venue)}`, '_blank')}
+                  type="button"
+                  onClick={() => openKakaoMap(weddingInfo.wedding.venue)}
                   className="flex-1 py-2 border border-stone-300 rounded-lg text-xs text-stone-600 hover:bg-stone-50 transition"
                 >
                   🚗 카카오 내비
                 </button>
                 <button
-                  onClick={() => window.open(`https://map.tmap.co.kr/map/search?searchKeyword=${encodeURIComponent(WEDDING_INFO.wedding.venue)}`, '_blank')}
+                  type="button"
+                  onClick={() => openTmap(weddingInfo.wedding.venue, weddingInfo.wedding.address)}
                   className="flex-1 py-2 border border-stone-300 rounded-lg text-xs text-stone-600 hover:bg-stone-50 transition"
                 >
                   📍 티맵
@@ -346,8 +295,8 @@ export default function App() {
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-stone-700 mb-2">지하철</p>
                     <p className="text-xs text-stone-600 leading-relaxed">
-                      {WEDDING_INFO.transportation.subway.map((info, idx) => (
-                        <span key={idx}>{info}{idx < WEDDING_INFO.transportation.subway.length - 1 ? <br /> : ''}</span>
+                      {weddingInfo.transportation.subway.map((info, idx) => (
+                        <span key={idx}>{info}{idx < weddingInfo.transportation.subway.length - 1 ? <br /> : ''}</span>
                       ))}
                     </p>
                   </div>
@@ -360,8 +309,8 @@ export default function App() {
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-stone-700 mb-2">버스</p>
                     <p className="text-xs text-stone-600 leading-relaxed">
-                      {WEDDING_INFO.transportation.bus.map((info, idx) => (
-                        <span key={idx}>{info}{idx < WEDDING_INFO.transportation.bus.length - 1 ? <br /> : ''}</span>
+                      {weddingInfo.transportation.bus.map((info, idx) => (
+                        <span key={idx}>{info}{idx < weddingInfo.transportation.bus.length - 1 ? <br /> : ''}</span>
                       ))}
                     </p>
                   </div>
@@ -374,8 +323,8 @@ export default function App() {
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-stone-700 mb-2">셔틀버스</p>
                     <p className="text-xs text-stone-600 leading-relaxed">
-                      {WEDDING_INFO.transportation.shuttleBus.map((info, idx) => (
-                        <span key={idx}>{info}{idx < WEDDING_INFO.transportation.shuttleBus.length - 1 ? <br /> : ''}</span>
+                      {weddingInfo.transportation.shuttleBus.map((info, idx) => (
+                        <span key={idx}>{info}{idx < weddingInfo.transportation.shuttleBus.length - 1 ? <br /> : ''}</span>
                       ))}
                     </p>
                   </div>
@@ -388,8 +337,8 @@ export default function App() {
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-stone-700 mb-2">주차안내</p>
                     <p className="text-xs text-stone-600 leading-relaxed">
-                      {WEDDING_INFO.transportation.parking.map((info, idx) => (
-                        <span key={idx}>{info}{idx < WEDDING_INFO.transportation.parking.length - 1 ? <br /> : ''}</span>
+                      {weddingInfo.transportation.parking.map((info, idx) => (
+                        <span key={idx}>{info}{idx < weddingInfo.transportation.parking.length - 1 ? <br /> : ''}</span>
                       ))}
                     </p>
                   </div>
@@ -413,7 +362,7 @@ export default function App() {
                   신랑측 계좌번호
                 </div>
                 <div className="px-6 pb-4 space-y-2 text-sm text-stone-600">
-                  {WEDDING_INFO.accounts.groom.map((account, idx) => (
+                  {weddingInfo.accounts.groom.map((account, idx) => (
                     <p key={idx}>{account.title}: {account.bank} {account.account} ({account.owner})</p>
                   ))}
                 </div>
@@ -424,7 +373,7 @@ export default function App() {
                   신부측 계좌번호
                 </div>
                 <div className="px-6 pb-4 space-y-2 text-sm text-stone-600">
-                  {WEDDING_INFO.accounts.bride.map((account, idx) => (
+                  {weddingInfo.accounts.bride.map((account, idx) => (
                     <p key={idx}>{account.title}: {account.bank} {account.account} ({account.owner})</p>
                   ))}
                 </div>
