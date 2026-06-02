@@ -1,6 +1,7 @@
 // import { RouterProvider } from 'react-router-dom';
 // import { router } from './route';
 import { useState, useEffect } from 'react';
+import AccountLine from './components/AccountLine';
 import ImageGallery from './components/ImageGallery';
 import ScrollReveal from './components/ScrollReveal';
 import { useWeddingInfo } from './hooks/useWeddingInfo';
@@ -361,9 +362,9 @@ export default function App() {
                 <div className="py-4 px-6 text-sm font-semibold text-stone-700">
                   신랑측 계좌번호
                 </div>
-                <div className="px-6 pb-4 space-y-2 text-sm text-stone-600">
+                <div className="px-6 pb-4 space-y-3">
                   {weddingInfo.accounts.groom.map((account, idx) => (
-                    <p key={idx}>{account.title}: {account.bank} {account.account} ({account.owner})</p>
+                    <AccountLine key={idx} account={account} />
                   ))}
                 </div>
               </div>
@@ -372,9 +373,9 @@ export default function App() {
                 <div className="py-4 px-6 text-sm font-semibold text-stone-700">
                   신부측 계좌번호
                 </div>
-                <div className="px-6 pb-4 space-y-2 text-sm text-stone-600">
+                <div className="px-6 pb-4 space-y-3">
                   {weddingInfo.accounts.bride.map((account, idx) => (
-                    <p key={idx}>{account.title}: {account.bank} {account.account} ({account.owner})</p>
+                    <AccountLine key={idx} account={account} />
                   ))}
                 </div>
               </div>
