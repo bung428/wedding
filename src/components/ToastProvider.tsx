@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useToastTheme } from '../hooks/useToastTheme';
 
 interface AnchorRect {
   top: number;
@@ -34,9 +35,10 @@ const VIEWPORT_MARGIN = 16;
 const TOAST_OFFSET_ABOVE_BUTTON = -11;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
+  const { theme: toastTheme, refreshTheme } = useToastTheme();
   const [toast, setToast] = useState<ToastState | null>(null);
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
-  const timeoutRef = useRef<number>();
+  const timeoutRef = useRef<number | undefined>(undefined);
   const toastRef = useRef<HTMLDivElement>(null);
 
   const showToast = useCallback((message: string, anchor?: HTMLElement | null) => {
@@ -45,6 +47,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }
 
     setPosition(null);
+    refreshTheme();
 
     if (anchor) {
       const rect = anchor.getBoundingClientRect();
@@ -70,7 +73,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       setToast(null);
       setPosition(null);
     }, TOAST_DURATION_MS);
-  }, []);
+  }, [refreshTheme]);
 
   useLayoutEffect(() => {
     if (!toast || !toastRef.current) return;
@@ -113,8 +116,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               >
                 <div
                   ref={toastRef}
-                  className="rounded-2xl border border-stone-600 bg-stone-900 px-3 py-1 text-center text-sm font-medium leading-relaxed text-white shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
-                  style={{ backgroundColor: '#1c1917' }}
+                  className="rounded-2xl border px-3 py-1 text-center text-sm font-medium leading-relaxed shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
+                  style={{
+                    colorScheme: toastTheme.colorScheme,
+                    backgroundColor: toastTheme.backgroundColor,
+                    color: toastTheme.color,
+                    borderColor: toastTheme.borderColor,
+                    WebkitTextFillColor: toastTheme.color,
+                  }}
                 >
                   {toast.message}
                 </div>
