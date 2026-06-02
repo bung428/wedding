@@ -1,0 +1,360 @@
+// import { RouterProvider } from 'react-router-dom';
+// import { router } from './route';
+import { useState, useEffect } from 'react';
+import ImageGallery from './components/ImageGallery';
+import ScrollReveal from './components/ScrollReveal';
+
+// 샘플 이미지 데이터 - 실제 이미지 경로로 교체하세요
+const WEDDING_IMAGES = [
+  'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1524675299446-f1e6abc2d9bf?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1543194139-d3ba71c8f4c3?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1525772637157-e5551e3ab417?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1545291730-faff8ca1d4b0?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1567603532550-2c7d89b85f7c?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1585173937365-4e2f2b5e8f90?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1594220227484-2a60e67e2d96?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1595347097560-69238724e7bd?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1600025204337-6949c3c4f7f5?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1606853991853-57f0f08a4b5c?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1623429445952-33b0be0e19e4?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1630088647972-fc531fe52f19?w=800&h=800&fit=crop',
+  'https://images.unsplash.com/photo-1635169029165-02058d9ee2fa?w=800&h=800&fit=crop',
+];
+
+const WEDDING_DATE = new Date('2026-05-30T13:30:00');
+
+// export default function App2() {
+//   return (
+//     <div style={{
+//       width: '100%',
+//       height: '50px',
+//       backgroundColor: 'red',
+//       margin: 0,
+//       padding: 0,
+//     }}>
+//     </div>
+//   );
+// }
+
+export default function App() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = WEDDING_DATE.getTime() - new Date().getTime();
+      
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        });
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // 배경색 설정
+  useEffect(() => {
+    document.body.style.backgroundColor = '#ffffff'; // 흰색
+    document.documentElement.style.backgroundColor = '#ffffff';
+    
+    return () => {
+      document.body.style.backgroundColor = '';
+      document.documentElement.style.backgroundColor = '';
+    };
+  }, []);
+  return (
+    <div style={{ width: '100%', margin: 0, padding: 0 }}>
+      {/* 메인 히어로 섹션 - 전체 너비, 독립적으로 배치 */}
+      <section 
+        className="relative flex items-center justify-center overflow-hidden"
+        style={{
+          width: '100%',
+          margin: 0,
+          padding: 0,
+          minHeight: '100vh',
+        }}
+      >
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-30"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=1200&fit=crop')`,
+            filter: 'blur(2px)',
+          }}
+        />
+        
+        <div className="relative z-10 text-center px-4">
+          <ScrollReveal direction="fade" delay={0.2}>
+            <div className="mb-8">
+              <div className="text-5xl sm:text-6xl font-serif text-stone-700 mb-6">
+                05<span className="text-3xl mx-2">/</span>30
+              </div>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.4}>
+            <div className="space-y-4">
+              <p className="text-sm sm:text-base text-stone-500 tracking-widest">최도현</p>
+              <div className="w-12 h-px bg-stone-300 mx-auto" />
+              <p className="text-sm sm:text-base text-stone-500 tracking-widest">이하나</p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.6}>
+            <div className="mt-8 text-stone-600 text-xs sm:text-sm">
+              <p>2026년 5월 30일 토요일 오후 1시 30분</p>
+              <p className="mt-1">아펠가모 광화문 B2 로스타도홀</p>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* 나머지 콘텐츠 영역 */}
+      <main className="min-h-screen bg-white">
+        <div className="max-w-md mx-auto">
+        {/* 초대 메시지 */}
+        <ScrollReveal>
+          <section className="py-16 px-6 text-center">
+  //           <p className="text-xs text-stone-400 tracking-[0.3em] mb-6">INVITATION</p>
+  //           <h2 className="text-2xl sm:text-3xl font-serif text-stone-700 mb-8">초대합니다</h2>
+            
+  //           <div className="space-y-4 text-stone-600 leading-relaxed text-sm sm:text-base">
+  //             <p>도망치지 않고 언제나 곁에 서서</p>
+  //             <p>혐명하게 모든 순간을 함께하며</p>
+  //             <p>하늘 아래 우리의 인연을 지키며</p>
+  //             <p className="text-rose-500">나의 당신만을 위해 살겠습니다</p>
+  //           </div>
+
+  //           <div className="mt-12 space-y-3 text-sm text-stone-600">
+  //             <p>최재만 · 서미숙 의 아들 <span className="font-semibold">도현</span></p>
+  //             <p>이승태 · 정선화 의 딸 <span className="font-semibold">하나</span></p>
+  //           </div>
+
+  //           <button className="mt-8 px-8 py-3 border-2 border-stone-300 rounded-full text-sm text-stone-600 hover:bg-stone-50 transition-all">
+  //             📞 연락하기
+  //           </button>
+  //         </section>
+  //       </ScrollReveal>
+
+  //       {/* 캘린더 & 카운트다운 */}
+  //       <ScrollReveal>
+  //         <section className="py-12 px-6">
+  //           <div className="text-center mb-8">
+  //             <p className="text-2xl sm:text-3xl font-serif text-stone-700 mb-2">2026.5.30</p>
+  //             <p className="text-sm text-stone-500">토요일 오후 1시 30분</p>
+  //           </div>
+
+  //           {/* 카운트다운 */}
+  //           <div className="flex justify-center gap-4 sm:gap-6 mb-8">
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.days).padStart(3, '0')}</div>
+  //               <div className="text-xs text-stone-400 mt-1">DAYS</div>
+  //             </div>
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">:</div>
+  //             </div>
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.hours).padStart(2, '0')}</div>
+  //               <div className="text-xs text-stone-400 mt-1">HOUR</div>
+  //             </div>
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">:</div>
+  //             </div>
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.minutes).padStart(2, '0')}</div>
+  //               <div className="text-xs text-stone-400 mt-1">MIN</div>
+  //             </div>
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">:</div>
+  //             </div>
+  //             <div className="text-center">
+  //               <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.seconds).padStart(2, '0')}</div>
+  //               <div className="text-xs text-stone-400 mt-1">SEC</div>
+  //             </div>
+  //           </div>
+
+  //           <p className="text-center text-sm text-stone-500">
+  //             도현 ❤️ 하나의 결혼식이 <span className="text-rose-500 font-semibold">{timeLeft.days}일</span> 남았습니다.
+  //           </p>
+  //         </section>
+  //       </ScrollReveal>
+
+  //       {/* 갤러리 */}
+  //       <ScrollReveal>
+  //         <section className="py-16 px-6">
+  //           <div className="text-center mb-8">
+  //             <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">GALLERY</p>
+  //             <h2 className="text-2xl sm:text-3xl font-serif text-stone-700">갤러리</h2>
+  //           </div>
+  //           <ImageGallery images={WEDDING_IMAGES} initialVisibleCount={6} />
+  //         </section>
+  //       </ScrollReveal>
+
+  //       {/* 장소 안내 */}
+  //       <ScrollReveal>
+  //         <section className="py-16 px-6">
+  //           <div className="text-center mb-8">
+  //             <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">LOCATION</p>
+  //             <h2 className="text-2xl sm:text-3xl font-serif text-stone-700 mb-6">오시는 길</h2>
+  //           </div>
+
+  //           <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
+  //             <h3 className="text-lg font-semibold text-stone-700 mb-2">아펠가모 광화문 B2 로스타도홀</h3>
+  //             <p className="text-sm text-stone-500 mb-4">서울 종로구 종로1길 50</p>
+
+  //             {/* 지도 플레이스홀더 */}
+  //             <div className="bg-stone-200 h-48 rounded-xl mb-4 flex items-center justify-center">
+  //               <p className="text-stone-400 text-sm">🗺️ 지도</p>
+  //             </div>
+
+  //             <div className="flex gap-2">
+  //               <button className="flex-1 py-2 border border-stone-300 rounded-lg text-xs text-stone-600">
+  //                 🗺️ 네이버 지도
+  //               </button>
+  //               <button className="flex-1 py-2 border border-stone-300 rounded-lg text-xs text-stone-600">
+  //                 🚗 카카오 내비
+  //               </button>
+  //               <button className="flex-1 py-2 border border-stone-300 rounded-lg text-xs text-stone-600">
+  //                 📍 티맵
+  //               </button>
+  //             </div>
+  //           </div>
+
+  //           {/* 교통 정보 */}
+  //           <div className="space-y-4">
+  //             <div className="bg-white rounded-xl p-4 shadow-sm">
+  //               <div className="flex items-start gap-3">
+  //                 <span className="text-xl">🚇</span>
+  //                 <div className="flex-1">
+  //                   <p className="text-sm font-semibold text-stone-700 mb-2">지하철</p>
+  //                   <p className="text-xs text-stone-600 leading-relaxed">
+  //                     [분당선] 서울숲역 5번 출구 도보 2분<br/>
+  //                     [2호선] 뚝섬역 8번 출구 도보 5분
+  //                   </p>
+  //                 </div>
+  //               </div>
+  //             </div>
+
+  //             <div className="bg-white rounded-xl p-4 shadow-sm">
+  //               <div className="flex items-start gap-3">
+  //                 <span className="text-xl">🚌</span>
+  //                 <div className="flex-1">
+  //                   <p className="text-sm font-semibold text-stone-700 mb-2">버스</p>
+  //                   <p className="text-xs text-stone-600 leading-relaxed">
+  //                     뚝섬 서울숲 정류장<br/>
+  //                     121, 141, 145, 148, 463
+  //                   </p>
+  //                 </div>
+  //               </div>
+  //             </div>
+
+  //             <div className="bg-white rounded-xl p-4 shadow-sm">
+  //               <div className="flex items-start gap-3">
+  //                 <span className="text-xl">🅿️</span>
+  //                 <div className="flex-1">
+  //                   <p className="text-sm font-semibold text-stone-700 mb-2">주차안내</p>
+  //                   <p className="text-xs text-stone-600 leading-relaxed">
+  //                     건물 내 B3-B7 2시간 무료주차<br/>
+  //                     안내 데스크에서 주차권 수령
+  //                   </p>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </section>
+  //       </ScrollReveal>
+
+  //       {/* 마음 전하실 곳 */}
+  //       <ScrollReveal>
+  //         <section className="py-16 px-6">
+  //           <div className="text-center mb-8">
+  //             <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">ACCOUNT</p>
+  //             <h2 className="text-2xl sm:text-3xl font-serif text-stone-700">마음 전하실 곳</h2>
+  //           </div>
+
+  //           <div className="space-y-4">
+  //             <details className="bg-stone-50 rounded-xl overflow-hidden">
+  //               <summary className="py-4 px-6 cursor-pointer text-sm font-semibold text-stone-700 flex justify-between items-center">
+  //                 신랑측 계좌번호
+  //                 <span className="text-stone-400">▼</span>
+  //               </summary>
+  //               <div className="px-6 pb-4 space-y-2 text-sm text-stone-600">
+  //                 <p>신랑: 국민은행 123-456-789012 (최도현)</p>
+  //                 <p>부: 우리은행 987-654-321098 (최재만)</p>
+  //                 <p>모: 신한은행 111-222-333444 (서미숙)</p>
+  //               </div>
+  //             </details>
+
+  //             <details className="bg-stone-50 rounded-xl overflow-hidden">
+  //               <summary className="py-4 px-6 cursor-pointer text-sm font-semibold text-stone-700 flex justify-between items-center">
+  //                 신부측 계좌번호
+  //                 <span className="text-stone-400">▼</span>
+  //               </summary>
+  //               <div className="px-6 pb-4 space-y-2 text-sm text-stone-600">
+  //                 <p>신부: 카카오뱅크 555-666-777888 (이하나)</p>
+  //                 <p>부: 농협은행 444-333-222111 (이승태)</p>
+  //                 <p>모: 하나은행 999-888-777666 (정선화)</p>
+  //               </div>
+  //             </details>
+  //           </div>
+  //         </section>
+  //       </ScrollReveal>
+
+  //       {/* 방명록 */}
+  //       <ScrollReveal>
+  //         <section className="py-16 px-6">
+  //           <div className="text-center mb-8">
+  //             <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">GUESTBOOK</p>
+  //             <h2 className="text-2xl sm:text-3xl font-serif text-stone-700">방명록</h2>
+  //           </div>
+
+  //           <div className="bg-white rounded-2xl p-6 shadow-sm">
+  //             <div className="text-center py-12">
+  //               <div className="text-4xl mb-4">✍️</div>
+  //               <p className="text-sm text-stone-500">첫 번째 축하 글을 남겨주세요</p>
+  //             </div>
+
+  //             <button className="w-full py-3 bg-stone-700 text-white rounded-xl text-sm font-semibold hover:bg-stone-800 transition-colors">
+  //               작성하기
+  //             </button>
+  //           </div>
+  //         </section>
+  //       </ScrollReveal>
+
+  //       {/* 하단 */}
+  //       <footer className="py-8 text-center text-xs text-stone-400">
+  //         <p>Copyright 2026. FROM TODAY. All rights reserved.</p>
+  //       </footer>
+  //     </div>
+  //   </main>
+  //   </div>
+  // );
+}

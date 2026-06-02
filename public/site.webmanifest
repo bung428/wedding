@@ -1,0 +1,15 @@
+{
+    "name": "findeet!",
+    "short_name": "findeet",
+    "icons": [
+        {
+            "src": "/apple-icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#fc5d2e",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "start_url": "/"
+}
