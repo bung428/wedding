@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { createPortal } from 'react-dom';
 
 interface AnchorRect {
   top: number;
@@ -29,6 +30,8 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 const TOAST_DURATION_MS = 2500;
 const VIEWPORT_MARGIN = 16;
+/** 복사 버튼 위쪽 간격 */
+const TOAST_OFFSET_ABOVE_BUTTON = -11;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastState | null>(null);
@@ -76,44 +79,56 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const { top, right, bottom } = toast.anchorRect;
     const margin = VIEWPORT_MARGIN;
 
-    // 버튼 오른쪽에 맞추고 왼쪽으로 펼침 (우측 화면 잘림 방지)
     let left = right - width;
     left = Math.max(margin, Math.min(left, window.innerWidth - margin - width));
 
-    const anchorY = toast.placement === 'above' ? top - 10 : bottom + 10;
+    const anchorY =
+      toast.placement === 'above' ? top - TOAST_OFFSET_ABOVE_BUTTON : bottom + 12;
     let toastTop = toast.placement === 'above' ? anchorY - height : anchorY;
 
-    // 상·하단 여백 보정
     toastTop = Math.max(margin, Math.min(toastTop, window.innerHeight - margin - height));
 
     setPosition({ top: toastTop, left });
   }, [toast]);
 
+  const toastLayer =
+    typeof document !== 'undefined'
+      ? createPortal(
+          <AnimatePresence>
+            {toast ? (
+              <motion.div
+                key={toast.message}
+                role="status"
+                aria-live="polite"
+                initial={{ y: 1, scale: 0.94 }}
+                animate={{ y: 0, scale: 1 }}
+                exit={{ y: 1, scale: 0.96 }}
+                transition={{ duration: 0.2 }}
+                style={
+                  position
+                    ? { top: position.top, left: position.left, visibility: 'visible' }
+                    : { top: toast.anchorRect.top, left: toast.anchorRect.right, visibility: 'hidden' }
+                }
+                className="pointer-events-none fixed z-[9999] isolate"
+              >
+                <div
+                  ref={toastRef}
+                  className="rounded-2xl border border-stone-600 bg-stone-900 px-3 py-1 text-center text-sm font-medium leading-relaxed text-white shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
+                  style={{ backgroundColor: '#1c1917' }}
+                >
+                  {toast.message}
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>,
+          document.body,
+        )
+      : null;
+
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <AnimatePresence>
-        {toast ? (
-          <motion.div
-            ref={toastRef}
-            key={toast.message}
-            role="status"
-            aria-live="polite"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.18 }}
-            style={
-              position
-                ? { top: position.top, left: position.left, visibility: 'visible' }
-                : { top: toast.anchorRect.top, left: toast.anchorRect.right, visibility: 'hidden' }
-            }
-            className="pointer-events-none fixed z-50 rounded-lg border border-stone-700 bg-stone-900 px-5 py-3 text-sm font-medium leading-snug text-white shadow-xl"
-          >
-            {toast.message}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      {toastLayer}
     </ToastContext.Provider>
   );
 }
