@@ -25,6 +25,7 @@ var PdfJsStandardFontsDir = normalizePath(
 export default defineConfig(function (_a) {
   var mode = _a.mode;
   return {
+    base: mode === "production" ? "/findeet-kr/" : "/",
     define: {
       "process.env": process.env,
     },

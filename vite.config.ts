@@ -28,6 +28,8 @@ export default defineConfig(({ mode }) => {
   return {
     // GitHub Pages는 기본적으로 `/<repo>/` 경로로 서빙됩니다.
     // 로컬/개발환경에서는 루트(`/`)로 유지합니다.
+    // GitHub Pages 배포 경로(`/findeet-kr/`)에 맞춰 asset 경로를 고정합니다.
+    // (이 프로젝트는 Pages 하위 경로로 배포되므로 absolute base가 가장 안전합니다.)
     base: mode === "production" ? "/findeet-kr/" : "/",
     define: {
       "process.env": process.env,
