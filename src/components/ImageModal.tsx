@@ -117,12 +117,17 @@ export default function ImageModal({
               e.stopPropagation();
               onPrevious();
             }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white hover:bg-gray-100 active:bg-gray-200 transition-all shadow-lg"
-            style={{ pointerEvents: 'auto' }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all"
+            style={{
+              pointerEvents: 'auto',
+              backgroundColor: 'rgba(0, 0, 0, 0.55)',
+              color: '#ffffff',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
+            }}
             aria-label="이전 이미지"
           >
             <svg
-              className="w-6 h-6 text-stone-800"
+              className="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -144,12 +149,17 @@ export default function ImageModal({
               e.stopPropagation();
               onNext();
             }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white hover:bg-gray-100 active:bg-gray-200 transition-all shadow-lg"
-            style={{ pointerEvents: 'auto' }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all"
+            style={{
+              pointerEvents: 'auto',
+              backgroundColor: 'rgba(0, 0, 0, 0.55)',
+              color: '#ffffff',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
+            }}
             aria-label="다음 이미지"
           >
             <svg
-              className="w-6 h-6 text-stone-800"
+              className="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -167,12 +177,17 @@ export default function ImageModal({
         {/* 닫기 버튼 - 우측 상단, 이미지 바깥쪽 */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-white hover:bg-gray-100 active:bg-gray-200 transition-all shadow-lg"
-          style={{ pointerEvents: 'auto' }}
+          className="absolute top-4 right-4 p-2 rounded-full transition-all"
+          style={{
+            pointerEvents: 'auto',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            color: '#ffffff',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
+          }}
           aria-label="닫기"
         >
           <svg
-            className="w-6 h-6 text-stone-800"
+            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -187,7 +202,15 @@ export default function ImageModal({
         </button>
 
         {/* 이미지 카운터 - 상단 중앙 */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white rounded-full shadow-lg text-sm font-medium text-stone-700" style={{ pointerEvents: 'auto' }}>
+        <div
+          className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-sm font-medium"
+          style={{
+            pointerEvents: 'auto',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            color: '#ffffff',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
+          }}
+        >
           {currentIndex + 1} / {images.length}
         </div>
       </div>

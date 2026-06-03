@@ -39,7 +39,7 @@ export default function AccountLine({ account }: AccountLineProps) {
   return (
     <div className="grid grid-cols-[1fr_2.25rem] items-center gap-2">
       <p className="min-w-0 text-sm text-stone-600 leading-snug">
-        {account.title}: {account.bank} {account.account} ({account.owner})
+        <span className="font-semibold text-stone-700">{account.owner} - </span> {account.bank} {account.account}
       </p>
       <button
         ref={copyButtonRef}

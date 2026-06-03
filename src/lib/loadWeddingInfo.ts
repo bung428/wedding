@@ -1,10 +1,35 @@
 import { DEFAULT_WEDDING_INFO } from '../config/defaultWedding';
 import type { WeddingInfo } from '../types/wedding';
 
+type RawWeddingInfo = Omit<WeddingInfo, 'invitation_message'> & {
+  invitation_message?:
+    | string
+    | {
+        line1?: string;
+        line2?: string;
+        line3?: string;
+        line4?: string;
+      };
+};
+
+function normalizeInvitationMessage(message: RawWeddingInfo['invitation_message']): string {
+  if (!message) return '';
+  if (typeof message === 'string') return message;
+
+  return [message.line1, message.line2, message.line3, message.line4]
+    .filter((line): line is string => Boolean(line))
+    .join('\n\n');
+}
+
 function parseWeddingJson(raw: string | undefined): WeddingInfo | null {
   if (!raw?.trim()) return null;
   try {
-    return JSON.parse(raw) as WeddingInfo;
+    const parsed = JSON.parse(raw) as RawWeddingInfo;
+
+    return {
+      ...parsed,
+      invitation_message: normalizeInvitationMessage(parsed.invitation_message),
+    };
   } catch (e) {
     console.error('Failed to parse wedding JSON:', e);
     return null;

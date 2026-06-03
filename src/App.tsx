@@ -152,7 +152,7 @@ export default function App() {
           <ScrollReveal direction="up" delay={0.4}>
             <div className="space-y-4">
               <p className="text-sm sm:text-base text-stone-500 tracking-widest">{weddingInfo.groomName}</p>
-              <div className="w-12 h-px bg-stone-300 mx-auto" />
+              {/* <div className="w-12 h-px bg-stone-300 mx-auto" /> */}
               <p className="text-sm sm:text-base text-stone-500 tracking-widest">{weddingInfo.brideName}</p>
             </div>
           </ScrollReveal>
@@ -171,14 +171,21 @@ export default function App() {
         {/* 초대 메시지 */}
         <ScrollReveal>
           <section className="py-16 px-6 text-center">
-            <p className="text-xs text-stone-400 tracking-[0.3em] mb-6">INVITATION</p>
-            <h2 className="text-2xl sm:text-3xl font-serif text-stone-700 mb-8">초대합니다</h2>
+            <p className="text-xm text-stone-400 tracking-[0.3em] mb-6">INVITATION</p>
             
             <div className="space-y-4 text-stone-600 leading-relaxed text-sm sm:text-base">
-              <p>{weddingInfo.invitation_message.line1}</p>
-              <p>{weddingInfo.invitation_message.line2}</p>
-              <p>{weddingInfo.invitation_message.line3}</p>
-              <p className="text-rose-500">{weddingInfo.invitation_message.line4}</p>
+              {weddingInfo.invitation_message
+                .split('\n\n')
+                .map((paragraph, index, paragraphs) => (
+                  <p
+                    key={index}
+                    className={`whitespace-pre-line${
+                      index === paragraphs.length - 1 ? ' text-rose-500' : ''
+                    }`}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
             </div>
 
             <div className="mt-12 space-y-3 text-sm text-stone-600">
@@ -235,8 +242,7 @@ export default function App() {
         <ScrollReveal>
           <section className="py-16 px-6">
             <div className="text-center mb-8">
-              <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">GALLERY</p>
-              <h2 className="text-2xl sm:text-3xl font-serif text-stone-700">갤러리</h2>
+              <p className="text-xm text-stone-400 tracking-[0.3em] mb-4">GALLERY</p>
             </div>
             <ImageGallery images={WEDDING_IMAGES} initialVisibleCount={6} />
           </section>
@@ -246,8 +252,7 @@ export default function App() {
         <ScrollReveal>
           <section className="py-16 px-6">
             <div className="text-center mb-8">
-              <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">LOCATION</p>
-              <h2 className="text-2xl sm:text-3xl font-serif text-stone-700 mb-6">오시는 길</h2>
+              <p className="text-xm text-stone-400 tracking-[0.3em] mb-4">LOCATION</p>
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
@@ -353,8 +358,7 @@ export default function App() {
         <ScrollReveal>
           <section className="py-16 px-6">
             <div className="text-center mb-8">
-              <p className="text-xs text-stone-400 tracking-[0.3em] mb-4">ACCOUNT</p>
-              <h2 className="text-2xl sm:text-3xl font-serif text-stone-700">마음 전하실 곳</h2>
+              <h2 className="text-xm text-stone-400 tracking-[0.3em] mb-4">ACCOUNT</h2>
             </div>
 
             <div className="space-y-4">
@@ -384,9 +388,9 @@ export default function App() {
         </ScrollReveal>
 
         {/* 하단 */}
-        <footer className="py-8 text-center text-xs text-stone-400">
+        {/* <footer className="py-8 text-center text-xs text-stone-400">
           <p>Copyright 2026. FROM TODAY. All rights reserved.</p>
-        </footer>
+        </footer> */}
       </div>
     </main>
     </div>

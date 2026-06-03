@@ -14,12 +14,7 @@
     "venue": "예식장 이름",
     "address": "서울시 예시 주소"
   },
-  "invitation_message": {
-    "line1": "초대 메시지 첫 줄",
-    "line2": "초대 메시지 둘째 줄",
-    "line3": "초대 메시지 셋째 줄",
-    "line4": "초대 메시지 넷째 줄"
-  },
+  "invitation_message": "초대 메시지 첫 문단 첫 줄\n초대 메시지 첫 문단 둘째 줄\n\n초대 메시지 둘째 문단",
   "accounts": {
     "groom": [
       { "title": "신랑", "bank": "은행명", "account": "000-000-000000", "owner": "예금주" }

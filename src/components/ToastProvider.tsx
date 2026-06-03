@@ -31,8 +31,8 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 const TOAST_DURATION_MS = 2500;
 const VIEWPORT_MARGIN = 16;
-/** 복사 버튼 위쪽 간격 */
-const TOAST_OFFSET_ABOVE_BUTTON = -11;
+/** 토스트 상단이 복사 버튼 상단보다 올라가는 정도 */
+const TOAST_RAISE_ABOVE_BUTTON = 40;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const { theme: toastTheme, refreshTheme } = useToastTheme();
@@ -85,9 +85,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     let left = right - width;
     left = Math.max(margin, Math.min(left, window.innerWidth - margin - width));
 
-    const anchorY =
-      toast.placement === 'above' ? top - TOAST_OFFSET_ABOVE_BUTTON : bottom + 12;
-    let toastTop = toast.placement === 'above' ? anchorY - height : anchorY;
+    let toastTop = toast.placement === 'above' ? top - TOAST_RAISE_ABOVE_BUTTON : bottom + 12;
 
     toastTop = Math.max(margin, Math.min(toastTop, window.innerHeight - margin - height));
 
@@ -116,7 +114,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               >
                 <div
                   ref={toastRef}
-                  className="rounded-2xl border px-3 py-1 text-center text-sm font-medium leading-relaxed shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
+                  className="rounded-2xl border px-4 py-2 text-center text-sm font-medium leading-relaxed shadow-[0_8px_16px_rgba(0,0,0,0.18),0_16px_48px_rgba(0,0,0,0.32)]"
                   style={{
                     colorScheme: toastTheme.colorScheme,
                     backgroundColor: toastTheme.backgroundColor,

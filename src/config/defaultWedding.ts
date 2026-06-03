@@ -16,7 +16,7 @@ export const DEFAULT_WEDDING_INFO: WeddingInfo = {
     venue: '예식장',
     address: '주소',
   },
-  invitation_message: { line1: '', line2: '', line3: '', line4: '' },
+  invitation_message: '',
   accounts: { groom: [], bride: [] },
   transportation: { subway: [], bus: [], shuttleBus: [], parking: [] },
 };
