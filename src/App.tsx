@@ -29,6 +29,7 @@ import whiteSolo2 from '../assets/images/white_solo_2.jpg';
 import whiteSolo3 from '../assets/images/white_solo_3.jpg';
 import whiteSolo4 from '../assets/images/white_solo_4.jpg';
 import weddingPlace from '../assets/images/wedding_place.png';
+import heroImage from '../assets/images/bgout_image.png';
 
 // 로컬 웨딩 이미지 데이터
 const WEDDING_IMAGES = [
@@ -54,9 +55,11 @@ const WEDDING_IMAGES = [
   whiteSolo4,
 ];
 
-const MAIN_IMAGE = WEDDING_IMAGES[0];
+const MAIN_IMAGE = heroImage;
 
 const WEEKDAYS = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+const ENG_WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const HERO_RING_COLOR = '#dddbdc';
 
 export default function App() {
   const { weddingInfo, isLoading } = useWeddingInfo();
@@ -114,56 +117,91 @@ export default function App() {
   const weddingPeriod = weddingHour >= 12 ? '오후' : '오전';
   const weddingDisplayHour = weddingHour % 12 || 12;
   const weddingMinuteText = weddingMinute > 0 ? `${weddingMinute}분` : '';
-  const weddingDateText = `${weddingDate.getFullYear()}년 ${weddingMonth}월 ${weddingDay}일 ${weddingWeekday} ${weddingPeriod} ${weddingDisplayHour}시 ${weddingMinuteText}`;
   const weddingShortDateText = `${weddingMonth}.${weddingDay}`;
   const weddingTimeText = `${weddingWeekday} ${weddingPeriod} ${weddingDisplayHour}시 ${weddingMinuteText}`;
 
+  const heroDateText = `${weddingDate.getFullYear()}. ${String(weddingMonth).padStart(2, '0')}. ${String(weddingDay).padStart(2, '0')} ${ENG_WEEKDAYS[weddingDate.getDay()]}`;
+  const heroTimeText = `${String(weddingHour).padStart(2, '0')}:${String(weddingMinute).padStart(2, '0')} ${weddingHour >= 12 ? 'PM' : 'AM'}`;
+
   return (
     <div style={{ width: '100%', margin: 0, padding: 0 }}>
-      {/* 메인 히어로 섹션 - 전체 너비, 독립적으로 배치 */}
-      <section 
-        className="relative h-screen flex items-center justify-center overflow-hidden"
+      {/* 메인 히어로 섹션 */}
+      <section
+        className="relative flex flex-col items-center justify-center overflow-hidden"
         style={{
           width: '100%',
           margin: 0,
-          padding: 0,
-          minHeight: '600px',
-          paddingTop: '100px',
-          paddingBottom: '100px',
+          minHeight: '100vh',
+          backgroundColor: '#ffffff',
+          padding: 'clamp(40px, 9vw, 72px) clamp(20px, 6vw, 40px)',
         }}
       >
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-30"
-          style={{
-            backgroundImage: `url(${MAIN_IMAGE})`,
-            filter: 'blur(2px)',
-          }}
-        />
-        
-        <div className="relative z-10 text-center px-4">
-          <ScrollReveal direction="fade" delay={0.2}>
-            <div className="mb-8">
-              <div className="text-5xl sm:text-6xl font-serif text-stone-700 mb-6">
-                {String(weddingInfo.wedding.month).padStart(2, '0')}<span className="text-3xl mx-2">/</span>{String(weddingInfo.wedding.day).padStart(2, '0')}
-              </div>
-            </div>
-          </ScrollReveal>
+        {/* 신랑 이름 */}
+        <ScrollReveal direction="fade" delay={0.2}>
+          <h1
+            className="text-stone-800 text-center"
+            style={{ fontFamily: '"Pinyon Script", "Cormorant Garamond", serif', fontSize: 'clamp(2.5rem, 11vw, 3.5rem)', lineHeight: 1.1 }}
+          >
+            {weddingInfo.groomNameEn ?? weddingInfo.groomName}
+          </h1>
+        </ScrollReveal>
 
-          <ScrollReveal direction="up" delay={0.4}>
-            <div className="space-y-4">
-              <p className="text-sm sm:text-base text-stone-500 tracking-widest">{weddingInfo.groomName}</p>
-              {/* <div className="w-12 h-px bg-stone-300 mx-auto" /> */}
-              <p className="text-sm sm:text-base text-stone-500 tracking-widest">{weddingInfo.brideName}</p>
-            </div>
-          </ScrollReveal>
+        {/* 사진 + 장식 타원 링 */}
+        <ScrollReveal direction="fade" delay={0.4}>
+          <div
+            className="relative my-10"
+            style={{ width: 'min(300px, 80vw)', aspectRatio: '1 / 1' }}
+          >
+            {/* 동심 타원 (원1 + 타원4) - 높이는 100%로 동일, width만 달라 곡률(경사)이 다름. 겹치지 않는 띠가 색/흰색 교차 */}
+            <div
+              className="absolute"
+              style={{ top: '50%', left: '50%', width: '100%', height: '100%', borderRadius: '50%', backgroundColor: HERO_RING_COLOR, transform: 'translate(-50%, -50%)' }}
+            />
+            <div
+              className="absolute"
+              style={{ top: '50%', left: '50%', width: '92%', height: '100%', borderRadius: '50%', backgroundColor: '#ffffff', transform: 'translate(-50%, -50%)' }}
+            />
+            <div
+              className="absolute"
+              style={{ top: '50%', left: '50%', width: '86%', height: '100%', borderRadius: '50%', backgroundColor: HERO_RING_COLOR, transform: 'translate(-50%, -50%)' }}
+            />
+            <div
+              className="absolute"
+              style={{ top: '50%', left: '50%', width: '83%', height: '100%', borderRadius: '50%', backgroundColor: '#ffffff', transform: 'translate(-50%, -50%)' }}
+            />
+            {/* 마지막 타원 = 컬러 배경. 그 위에 인물 사진을 cover로 채움 */}
+            <div
+              className="absolute overflow-hidden"
+              style={{ top: '50%', left: '50%', width: '72%', height: '100%', borderRadius: '50%', backgroundColor: HERO_RING_COLOR, transform: 'translate(-50%, -50%)' }}
+            >
+              <img src={MAIN_IMAGE} alt="couple" className="w-full h-full object-cover" style={{ objectPosition: 'center bottom' }} />
+            </div>          
+          </div>
+        </ScrollReveal>
 
-          <ScrollReveal direction="up" delay={0.6}>
-            <div className="mt-8 text-stone-600 text-xs sm:text-sm">
-              <p>{weddingDateText}</p>
-              <p className="mt-1">{weddingInfo.wedding.venue}</p>
+        {/* 신부 이름 */}
+        <ScrollReveal direction="fade" delay={0.6}>
+          <h1
+            className="text-stone-800 text-center"
+            style={{ fontFamily: '"Pinyon Script", "Cormorant Garamond", serif', fontSize: 'clamp(2.5rem, 11vw, 3.5rem)', lineHeight: 1.1 }}
+          >
+            {weddingInfo.brideNameEn ?? weddingInfo.brideName}
+          </h1>
+        </ScrollReveal>
+
+        {/* 하단 정보 */}
+        <ScrollReveal direction="up" delay={0.8}>
+          <div className="w-full max-w-xs flex justify-between items-end gap-3 mt-12 sm:mt-16 text-stone-700 text-xs sm:text-sm">
+            <div className="text-left leading-relaxed">
+              <p>{weddingInfo.wedding.venue}</p>
+              <p>Wedding Day</p>
             </div>
-          </ScrollReveal>
-        </div>
+            <div className="text-right leading-relaxed whitespace-nowrap">
+              <p>{heroDateText}</p>
+              <p>{heroTimeText}</p>
+            </div>
+          </div>
+        </ScrollReveal>
       </section>
       {/* 나머지 콘텐츠 영역 */}
       <main className="min-h-screen bg-white">
@@ -189,8 +227,8 @@ export default function App() {
             </div>
 
             <div className="mt-12 space-y-3 text-sm text-stone-600">
-              <p>{weddingInfo.groomParents.father} · {weddingInfo.groomParents.mother} 의 아들 <span className="font-semibold">{weddingInfo.groomName}</span></p>
-              <p>{weddingInfo.brideParents.father} · {weddingInfo.brideParents.mother} 의 딸 <span className="font-semibold">{weddingInfo.brideName}</span></p>
+              <p>{weddingInfo.groomParents.father} · {weddingInfo.groomParents.mother} 의 장남 <span className="font-semibold">{weddingInfo.groomName}</span></p>
+              <p>{weddingInfo.brideParents.father} · {weddingInfo.brideParents.mother} 의 장녀 <span className="font-semibold">{weddingInfo.brideName}</span></p>
             </div>
           </section>
         </ScrollReveal>
@@ -199,35 +237,35 @@ export default function App() {
         <ScrollReveal>
           <section className="py-12 px-6">
             <div className="text-center mb-8">
-              <p className="text-2xl sm:text-3xl font-serif text-stone-700 mb-2">{weddingShortDateText}</p>
+              <p className="text-2xl sm:text-3xl font-sans text-stone-700 mb-2">{weddingShortDateText}</p>
               <p className="text-sm text-stone-500">{weddingTimeText}</p>
             </div>
 
             {/* 카운트다운 */}
-            <div className="flex justify-center gap-4 sm:gap-6 mb-8">
+            <div className="flex justify-center gap-2 sm:gap-6 mb-8">
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.days).padStart(3, '0')}</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">{String(timeLeft.days).padStart(3, '0')}</div>
                 <div className="text-xs text-stone-400 mt-1">DAYS</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">:</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">:</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.hours).padStart(2, '0')}</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">{String(timeLeft.hours).padStart(2, '0')}</div>
                 <div className="text-xs text-stone-400 mt-1">HOUR</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">:</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">:</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">{String(timeLeft.minutes).padStart(2, '0')}</div>
                 <div className="text-xs text-stone-400 mt-1">MIN</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">:</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">:</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-light text-stone-700">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                <div className="text-2xl sm:text-4xl font-light text-stone-700">{String(timeLeft.seconds).padStart(2, '0')}</div>
                 <div className="text-xs text-stone-400 mt-1">SEC</div>
               </div>
             </div>

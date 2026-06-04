@@ -1,6 +1,8 @@
 {
   "groomName": "김병구",
   "brideName": "박남율",
+  "groomNameEn": "Byoung Koo",
+  "brideNameEn": "Nam Yul",
   "groomParents": {
     "father": "김석후",
     "mother": "김민옥"
@@ -45,20 +47,20 @@
     "bride": [
       {
         "title": "신부",
-        "bank": "카카오뱅크",
-        "account": "555-666-777888",
+        "bank": "국민은행",
+        "account": "730601-04-069015",
         "owner": "박남율"
       },
       {
         "title": "부",
-        "bank": "농협은행",
-        "account": "444-333-222111",
+        "bank": "국민은행",
+        "account": "796801-00-035603",
         "owner": "박정곤"
       },
       {
         "title": "모",
-        "bank": "하나은행",
-        "account": "999-888-777666",
+        "bank": "SC제일은행",
+        "account": "363-20-041641",
         "owner": "김경미"
       }
     ]

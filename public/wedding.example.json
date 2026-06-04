@@ -1,6 +1,8 @@
 {
   "groomName": "신랑",
   "brideName": "신부",
+  "groomNameEn": "Groom",
+  "brideNameEn": "Bride",
   "groomParents": { "father": "신랑 아버지", "mother": "신랑 어머니" },
   "brideParents": { "father": "신부 아버지", "mother": "신부 어머니" },
   "wedding": {

@@ -8,6 +8,8 @@ export interface WeddingAccount {
 export interface WeddingInfo {
   groomName: string;
   brideName: string;
+  groomNameEn?: string;
+  brideNameEn?: string;
   groomParents: { father: string; mother: string };
   brideParents: { father: string; mother: string };
   wedding: {
