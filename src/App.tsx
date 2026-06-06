@@ -141,7 +141,7 @@ export default function App() {
         {/* 사진 + 장식 타원 링 */}
         <ScrollReveal direction="fade" delay={0.4}>
           <div
-            className="relative mt-10 mb-4"
+            className="relative mt-0 mb-4"
             style={{ width: '100%', maxWidth: '480px' }}
           >
               <img
@@ -154,7 +154,7 @@ export default function App() {
         </ScrollReveal>
         {/* 하단 정보 */}
         <ScrollReveal direction="up" delay={0.8}>
-          <div className="w-full max-w-xs flex flex-col items-center gap-1 mt-4 text-stone-700">
+          <div className="w-full max-w-xs flex flex-col items-center gap-1 mt-8 text-stone-700">
             <p className="text-center leading-tight" style={{ fontSize: '18px' }}>{heroDateText} {heroTimeText}</p>
             <p className="text-center leading-tight" style={{ fontSize: '16px' }}>{weddingInfo.wedding.venue}</p>
           </div>
@@ -183,7 +183,7 @@ export default function App() {
                 ))}
             </div>
 
-            <div className="mt-12 space-y-3 text-sm text-stone-600">
+            <div className="mt-12 space-y-3 text-lg text-stone-600">
               <p>{weddingInfo.groomParents.father} · {weddingInfo.groomParents.mother} 의 장남 <span className="font-semibold">{weddingInfo.groomName}</span></p>
               <p>{weddingInfo.brideParents.father} · {weddingInfo.brideParents.mother} 의 장녀 <span className="font-semibold">{weddingInfo.brideName}</span></p>
             </div>
