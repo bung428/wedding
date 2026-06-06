@@ -29,7 +29,7 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-const TOAST_DURATION_MS = 2500;
+const TOAST_DURATION_MS = 500;
 const VIEWPORT_MARGIN = 16;
 /** 토스트 상단이 복사 버튼 상단보다 올라가는 정도 */
 const TOAST_RAISE_ABOVE_BUTTON = 40;

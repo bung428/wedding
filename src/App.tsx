@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import AccountLine from './components/AccountLine';
 import ImageGallery from './components/ImageGallery';
+import MusicPlayer from './components/MusicPlayer';
 import ScrollReveal from './components/ScrollReveal';
 import { useWeddingInfo } from './hooks/useWeddingInfo';
 import { openKakaoMap, openNaverMap, openTmap } from './utils/mapLinks';
@@ -29,7 +30,7 @@ import whiteSolo2 from '../assets/images/white_solo_2.jpg';
 import whiteSolo3 from '../assets/images/white_solo_3.jpg';
 import whiteSolo4 from '../assets/images/white_solo_4.jpg';
 import weddingPlace from '../assets/images/wedding_place.png';
-import heroImage from '../assets/images/bgout_image.png';
+import heroImage from '../assets/images/hero_image.png';
 
 // 로컬 웨딩 이미지 데이터
 const WEDDING_IMAGES = [
@@ -59,7 +60,6 @@ const MAIN_IMAGE = heroImage;
 
 const WEEKDAYS = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 const ENG_WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-const HERO_RING_COLOR = '#dddbdc';
 
 export default function App() {
   const { weddingInfo, isLoading } = useWeddingInfo();
@@ -125,6 +125,8 @@ export default function App() {
 
   return (
     <div style={{ width: '100%', margin: 0, padding: 0 }}>
+      {/* 배경음악 플레이어 */}
+      <MusicPlayer />
       {/* 메인 히어로 섹션 */}
       <section
         className="relative flex flex-col items-center justify-center overflow-hidden"
@@ -152,30 +154,7 @@ export default function App() {
             className="relative my-10"
             style={{ width: 'min(300px, 80vw)', aspectRatio: '1 / 1' }}
           >
-            {/* 동심 타원 (원1 + 타원4) - 높이는 100%로 동일, width만 달라 곡률(경사)이 다름. 겹치지 않는 띠가 색/흰색 교차 */}
-            <div
-              className="absolute"
-              style={{ top: '50%', left: '50%', width: '100%', height: '100%', borderRadius: '50%', backgroundColor: HERO_RING_COLOR, transform: 'translate(-50%, -50%)' }}
-            />
-            <div
-              className="absolute"
-              style={{ top: '50%', left: '50%', width: '92%', height: '100%', borderRadius: '50%', backgroundColor: '#ffffff', transform: 'translate(-50%, -50%)' }}
-            />
-            <div
-              className="absolute"
-              style={{ top: '50%', left: '50%', width: '86%', height: '100%', borderRadius: '50%', backgroundColor: HERO_RING_COLOR, transform: 'translate(-50%, -50%)' }}
-            />
-            <div
-              className="absolute"
-              style={{ top: '50%', left: '50%', width: '83%', height: '100%', borderRadius: '50%', backgroundColor: '#ffffff', transform: 'translate(-50%, -50%)' }}
-            />
-            {/* 마지막 타원 = 컬러 배경. 그 위에 인물 사진을 cover로 채움 */}
-            <div
-              className="absolute overflow-hidden"
-              style={{ top: '50%', left: '50%', width: '72%', height: '100%', borderRadius: '50%', backgroundColor: HERO_RING_COLOR, transform: 'translate(-50%, -50%)' }}
-            >
               <img src={MAIN_IMAGE} alt="couple" className="w-full h-full object-cover" style={{ objectPosition: 'center bottom' }} />
-            </div>          
           </div>
         </ScrollReveal>
 
@@ -191,15 +170,9 @@ export default function App() {
 
         {/* 하단 정보 */}
         <ScrollReveal direction="up" delay={0.8}>
-          <div className="w-full max-w-xs flex justify-between items-end gap-3 mt-12 sm:mt-16 text-stone-700 text-xs sm:text-sm">
-            <div className="text-left leading-relaxed">
-              <p>{weddingInfo.wedding.venue}</p>
-              <p>Wedding Day</p>
-            </div>
-            <div className="text-right leading-relaxed whitespace-nowrap">
-              <p>{heroDateText}</p>
-              <p>{heroTimeText}</p>
-            </div>
+          <div className="w-full max-w-xs flex flex-col items-center gap-1 mt-12 sm:mt-16 text-stone-700">
+            <p className="text-center leading-tight" style={{ fontSize: '18px' }}>{heroDateText} {heroTimeText}</p>
+            <p className="text-center leading-tight" style={{ fontSize: '16px' }}>{weddingInfo.wedding.venue}</p>
           </div>
         </ScrollReveal>
       </section>
