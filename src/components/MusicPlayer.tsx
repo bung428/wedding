@@ -3,6 +3,7 @@ import bgmUrl from '../../assets/songs/니가좋아.m4a';
 
 export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const shouldResumeRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
@@ -34,6 +35,39 @@ export default function MusicPlayer() {
     };
 
     tryAutoPlay();
+
+    const pauseForBackground = () => {
+      shouldResumeRef.current = !audio.paused;
+      audio.pause();
+      setIsPlaying(false);
+    };
+
+    const resumeFromBackground = () => {
+      if (!shouldResumeRef.current) return;
+
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        pauseForBackground();
+      } else {
+        resumeFromBackground();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', pauseForBackground);
+    window.addEventListener('pageshow', resumeFromBackground);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', pauseForBackground);
+      window.removeEventListener('pageshow', resumeFromBackground);
+    };
   }, []);
 
   const toggle = () => {
