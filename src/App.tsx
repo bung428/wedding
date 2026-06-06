@@ -138,39 +138,23 @@ export default function App() {
           padding: 'clamp(40px, 9vw, 72px) clamp(20px, 6vw, 40px)',
         }}
       >
-        {/* 신랑 이름 */}
-        <ScrollReveal direction="fade" delay={0.2}>
-          <h1
-            className="text-stone-800 text-center"
-            style={{ fontFamily: '"Pinyon Script", "Cormorant Garamond", serif', fontSize: 'clamp(2.5rem, 11vw, 3.5rem)', lineHeight: 1.1 }}
-          >
-            {weddingInfo.groomNameEn ?? weddingInfo.groomName}
-          </h1>
-        </ScrollReveal>
-
         {/* 사진 + 장식 타원 링 */}
         <ScrollReveal direction="fade" delay={0.4}>
           <div
-            className="relative my-10"
-            style={{ width: 'min(300px, 80vw)', aspectRatio: '1 / 1' }}
+            className="relative mt-10 mb-4"
+            style={{ width: '100%', maxWidth: '480px' }}
           >
-              <img src={MAIN_IMAGE} alt="couple" className="w-full h-full object-cover" style={{ objectPosition: 'center bottom' }} />
+              <img
+                src={MAIN_IMAGE}
+                alt="couple"
+                className="w-full object-contain mx-auto"
+                style={{ maxHeight: '60vh', width: 'auto', maxWidth: '100%' }}
+              />
           </div>
         </ScrollReveal>
-
-        {/* 신부 이름 */}
-        <ScrollReveal direction="fade" delay={0.6}>
-          <h1
-            className="text-stone-800 text-center"
-            style={{ fontFamily: '"Pinyon Script", "Cormorant Garamond", serif', fontSize: 'clamp(2.5rem, 11vw, 3.5rem)', lineHeight: 1.1 }}
-          >
-            {weddingInfo.brideNameEn ?? weddingInfo.brideName}
-          </h1>
-        </ScrollReveal>
-
         {/* 하단 정보 */}
         <ScrollReveal direction="up" delay={0.8}>
-          <div className="w-full max-w-xs flex flex-col items-center gap-1 mt-12 sm:mt-16 text-stone-700">
+          <div className="w-full max-w-xs flex flex-col items-center gap-1 mt-4 text-stone-700">
             <p className="text-center leading-tight" style={{ fontSize: '18px' }}>{heroDateText} {heroTimeText}</p>
             <p className="text-center leading-tight" style={{ fontSize: '16px' }}>{weddingInfo.wedding.venue}</p>
           </div>
@@ -210,7 +194,7 @@ export default function App() {
         <ScrollReveal>
           <section className="py-12 px-6">
             <div className="text-center mb-8">
-              <p className="text-2xl sm:text-3xl font-sans text-stone-700 mb-2">{weddingShortDateText}</p>
+              <p className="text-4xl sm:text-3xl font-sans text-stone-700 mb-2">{weddingShortDateText}</p>
               <p className="text-sm text-stone-500">{weddingTimeText}</p>
             </div>
 
@@ -262,11 +246,11 @@ export default function App() {
         {/* 장소 안내 */}
         <ScrollReveal>
           <section className="py-16 px-6">
-            <div className="text-center mb-8">
+            <div className="text-center mb-0">
               <p className="text-xm text-stone-400 tracking-[0.3em] mb-4">LOCATION</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
+            <div className="bg-white rounded-2xl p-4 shadow-sm mb-6">
               <h3 className="text-lg font-semibold text-stone-700 mb-2">{weddingInfo.wedding.venue}</h3>
               <p className="text-sm text-stone-500 mb-4">{weddingInfo.wedding.address}</p>
 
